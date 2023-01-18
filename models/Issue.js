@@ -1,11 +1,11 @@
 const { Schema, model } = require("mongoose");
 
 const issueSchema = new Schema({
-  issue_title: String,
-  issue_text: String,
+  issue_title: { type: String, required: true },
+  issue_text: { type: String, required: true },
   created_on: Date,
   updated_on: Date,
-  created_by: String,
+  created_by: { type: String, required: true },
   assigned_to: String,
   open: Boolean,
   status_text: String,

@@ -32,8 +32,9 @@ module.exports = function (app) {
       try {
         await issue.save();
         console.log(project.issue_title + ' issue created');
-        res.send(issue);
+        res.status(200).send(issue);
       } catch (error) {
+        res.status(422).send({ message: 'invalid input' });
         console.log(error);
       }
     })

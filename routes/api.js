@@ -7,10 +7,15 @@ module.exports = function (app) {
     .route('/api/issues/:project')
 
     .get(async function (req, res) {
-      let projectId = req.params.project;
+      const findConditions = {};
+      for (const key in req.query) {
+        findConditions[key] = req.query[key];
+      }
       try {
-        const issue = await Issue.findById(projectId);
-        res.json(issue);
+        const issues = await Issue.find({
+          findConditions,
+        });
+        res.json(issues);
       } catch (error) {
         console.log(error);
       }

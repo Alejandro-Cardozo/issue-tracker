@@ -12,7 +12,7 @@ suite('Functional Tests', function () {
     test('Create an issue with every field', function (done) {
       chai
         .request(server)
-        .post('/api/issues/:project')
+        .post('/api/issues/apitest')
         .type('form')
         .send({
           issue_title: 'Fix error in posting data',
@@ -33,7 +33,7 @@ suite('Functional Tests', function () {
     test('Create an issue with only required fields', function (done) {
       chai
         .request(server)
-        .post('/api/issues/:project')
+        .post('/api/issues/apitest')
         .type('form')
         .send({
           issue_title: 'Update legacy libraries',
@@ -52,7 +52,7 @@ suite('Functional Tests', function () {
     test('Create an issue with missing required fields', function (done) {
       chai
         .request(server)
-        .post('/api/issues/:project')
+        .post('/api/issues/apitest')
         .type('form')
         .send({
           assigned_to: 'Joe',
@@ -72,7 +72,7 @@ suite('Functional Tests', function () {
     test('View issues on a project', function (done) {
       chai
         .request(server)
-        .get('/api/issues/:project')
+        .get('/api/issues/apitest')
         .end(function (err, res) {
           assert.equal(res.status, 200);
           assert.equal(res.type, 'application/json');
@@ -83,7 +83,7 @@ suite('Functional Tests', function () {
     test('View issues on a project with one filter', function (done) {
       chai
         .request(server)
-        .get('/api/issues/:project?open=true')
+        .get('/api/issues/apitest?open=true')
         .end(function (err, res) {
           assert.equal(res.status, 200);
           assert.equal(res.type, 'application/json');
@@ -94,7 +94,7 @@ suite('Functional Tests', function () {
     test('View issues on a project with multiple filters', function (done) {
       chai
         .request(server)
-        .get('/api/issues/:project?open=true&created_by=Ash')
+        .get('/api/issues/apitest?open=true&created_by=Ash')
         .end(function (err, res) {
           assert.equal(res.status, 200);
           assert.equal(res.type, 'application/json');
@@ -107,7 +107,7 @@ suite('Functional Tests', function () {
     test('Update one field on an issue', function (done) {
       chai
         .request(server)
-        .put('/api/issues/:project')
+        .put('/api/issues/apitest')
         .send({ _id: process.env.PUT_ID_TEST, issue_text: 'New text' })
         .end(function (err, res) {
           assert.isNull(err);
@@ -121,7 +121,7 @@ suite('Functional Tests', function () {
     test('Update multiple fields on an issue', function (done) {
       chai
         .request(server)
-        .put('/api/issues/:project')
+        .put('/api/issues/apitest')
         .send({
           _id: process.env.PUT_ID_TEST,
           issue_text: 'New issue',
@@ -139,7 +139,7 @@ suite('Functional Tests', function () {
     test('Update an issue with missing _id', function (done) {
       chai
         .request(server)
-        .put('/api/issues/:project')
+        .put('/api/issues/apitest')
         .send({ issue_text: 'New issue', assigned_to: 'Marcus' })
         .end(function (err, res) {
           assert.isNull(err);
@@ -153,7 +153,7 @@ suite('Functional Tests', function () {
     test('Update an issue with no fields to update', function (done) {
       chai
         .request(server)
-        .put('/api/issues/:project')
+        .put('/api/issues/apitest')
         .send({ _id: process.env.PUT_ID_TEST })
         .end(function (err, res) {
           assert.isNull(err);
@@ -167,7 +167,7 @@ suite('Functional Tests', function () {
     test('Update an issue with an invalid _id', function (done) {
       chai
         .request(server)
-        .put('/api/issues/:project')
+        .put('/api/issues/apitest')
         .send({
           _id: '630fb02efb7c75018f7b3fcb',
           issue_text: 'New issue',
@@ -187,7 +187,7 @@ suite('Functional Tests', function () {
     test('Delete an issue', function (done) {
       chai
         .request(server)
-        .delete('/api/issues/:project')
+        .delete('/api/issues/apitest')
         .send({ _id: process.env.DELETE_ID_TEST })
         .end(function (err, res) {
           assert.isNull(err);
@@ -201,7 +201,7 @@ suite('Functional Tests', function () {
     test('Delete an issue with an invalid _id', function (done) {
       chai
         .request(server)
-        .delete('/api/issues/:project')
+        .delete('/api/issues/apitest')
         .send({ _id: '630fb02efb7c75018f7b3fcb' })
         .end(function (err, res) {
           assert.isNull(err);
@@ -215,7 +215,7 @@ suite('Functional Tests', function () {
     test('Delete an issue with missing _id', function (done) {
       chai
         .request(server)
-        .delete('/api/issues/:project')
+        .delete('/api/issues/apitest')
         .send({})
         .end(function (err, res) {
           assert.isNull(err);

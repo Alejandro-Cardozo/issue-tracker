@@ -1,12 +1,16 @@
 'use strict';
 
-const Issue = require('../models/Issue');
+const issueSchema = require('../models/Issue');
+const { model } = require("mongoose");
+
+const issueModel = (project) => (model("Issue", issueSchema, project));
 
 module.exports = function (app) {
   app
     .route('/api/issues/:project')
 
     .get(async function (req, res) {
+      const Issue = issueModel(req.params.project);
       const findConditions = {};
       for (const key in req.query) {
         findConditions[key] = req.query[key];
@@ -20,6 +24,7 @@ module.exports = function (app) {
     })
 
     .post(async function (req, res) {
+      const Issue = issueModel(req.params.project);
       let date = new Date();
       let project = req.body;
       const issue = new Issue({
@@ -36,13 +41,14 @@ module.exports = function (app) {
         await issue.save();
         console.log(project.issue_title + ' issue created');
         res.status(200).send(issue);
-      } catch (error) {
+      } catch (e) {
         res.status(422).send({ error: 'required field(s) missing' });
-        console.log(error);
+        console.log(e);
       }
     })
 
     .put(async function (req, res) {
+      const Issue = issueModel(req.params.project);
       let date = new Date();
       let project = req.body;
       if (!project._id) {
@@ -71,13 +77,14 @@ module.exports = function (app) {
     })
 
     .delete(async function (req, res) {
+      const Issue = issueModel(req.params.project);
       let projectId = req.body._id;
       try {
         if (!projectId) {
           res.status(422).send({ error: 'missing _id' });
           return;
         }
-        const result = await Issue.findByIdAndDelete(projectId);
+        const result = await Issue.findById(projectId);
         res
           .status(200)
           .send({ result: 'successfully deleted', _id: result._id });

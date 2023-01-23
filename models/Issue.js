@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema } = require("mongoose");
 
 const issueSchema = new Schema({
   issue_title: { type: String, required: true },
@@ -11,4 +11,4 @@ const issueSchema = new Schema({
   status_text: String,
 });
 
-module.exports = model("Issue", issueSchema);
+module.exports = issueSchema;

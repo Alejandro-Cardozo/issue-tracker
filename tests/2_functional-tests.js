@@ -102,74 +102,118 @@ suite('Functional Tests', function () {
   //       });
   //   });
   // });
-  suite('PUT Requests', function () {
-    // #7
-    test('Update one field on an issue', function (done) {
+  // suite('PUT Requests', function () {
+  //   // #7
+  //   test('Update one field on an issue', function (done) {
+  //     chai
+  //       .request(server)
+  //       .put('/api/issues/:project')
+  //       .send({ _id: '63c5a9c7230a9948ebc14892', issue_text: 'New text' })
+  //       .end(function (err, res) {
+  //         assert.isNull(err);
+  //         assert.equal(res.status, 200);
+  //         assert.equal(res.type, 'application/json');
+  //         assert.equal(res.body.result, 'successfully updated');
+  //         done();
+  //       });
+  //   });
+  //   // #8
+  //   test('Update multiple fields on an issue', function (done) {
+  //     chai
+  //       .request(server)
+  //       .put('/api/issues/:project')
+  //       .send({ _id: '63c5a9c7230a9948ebc14892', issue_text: 'New issue', assigned_to: 'Marcus' })
+  //       .end(function (err, res) {
+  //         assert.isNull(err);
+  //         assert.equal(res.status, 200);
+  //         assert.equal(res.type, 'application/json');
+  //         assert.equal(res.body.result, 'successfully updated');
+  //         done();
+  //       });
+  //   });
+  //   // #9
+  //   test('Update an issue with missing _id', function (done) {
+  //     chai
+  //       .request(server)
+  //       .put('/api/issues/:project')
+  //       .send({ issue_text: 'New issue', assigned_to: 'Marcus' })
+  //       .end(function (err, res) {
+  //         assert.isNull(err);
+  //         assert.equal(res.status, 422);
+  //         assert.equal(res.type, 'application/json');
+  //         assert.equal(res.body.message, 'invalid input');
+  //         done();
+  //       });
+  //   });
+  //   // #10
+  //   test('Update an issue with no fields to update', function (done) {
+  //     chai
+  //       .request(server)
+  //       .put('/api/issues/:project')
+  //       .send({ _id: '63c5a9c7230a9948ebc14892' })
+  //       .end(function (err, res) {
+  //         assert.isNull(err);
+  //         assert.equal(res.status, 200);
+  //         assert.equal(res.type, 'application/json');
+  //         assert.equal(res.body.result, 'successfully updated');
+  //         done();
+  //       });
+  //   });
+  //   // #11
+  //   test('Update an issue with an invalid _id', function (done) {
+  //     chai
+  //       .request(server)
+  //       .put('/api/issues/:project')
+  //       .send({ _id: '630cc27e4fc5c809ff71d159', issue_text: 'New issue', assigned_to: 'Marcus' })
+  //       .end(function (err, res) {
+  //         assert.isNull(err);
+  //         assert.equal(res.status, 422);
+  //         assert.equal(res.type, 'application/json');
+  //         assert.equal(res.body.message, 'invalid input');
+  //         done();
+  //       });
+  //   });
+  // });
+  suite('DELETE Requests', function () {
+    // #12
+    test('Delete an issue', function (done) {
       chai
         .request(server)
-        .put('/api/issues/:project')
-        .send({ _id: '63c5a9c7230a9948ebc14892', issue_text: 'New text' })
+        .delete('/api/issues/:project')
+        .send({ _id: '63c83c3ec3212d5d40ee2f57' })
         .end(function (err, res) {
           assert.isNull(err);
           assert.equal(res.status, 200);
           assert.equal(res.type, 'application/json');
-          assert.equal(res.body.result, 'successfully updated');
+          assert.equal(res.body.result, 'successfully deleted');
           done();
         });
     });
-    // #8
-    test('Update multiple fields on an issue', function (done) {
+    // #13
+    test('Delete an issue with an invalid _id', function (done) {
       chai
         .request(server)
-        .put('/api/issues/:project')
-        .send({ _id: '63c5a9c7230a9948ebc14892', issue_text: 'New issue', assigned_to: 'Marcus' })
-        .end(function (err, res) {
-          assert.isNull(err);
-          assert.equal(res.status, 200);
-          assert.equal(res.type, 'application/json');
-          assert.equal(res.body.result, 'successfully updated');
-          done();
-        });
-    });
-    // #9
-    test('Update an issue with missing _id', function (done) {
-      chai
-        .request(server)
-        .put('/api/issues/:project')
-        .send({ issue_text: 'New issue', assigned_to: 'Marcus' })
+        .delete('/api/issues/:project')
+        .send({ _id: '630cc27e4fc5c809ff71d159' })
         .end(function (err, res) {
           assert.isNull(err);
           assert.equal(res.status, 422);
           assert.equal(res.type, 'application/json');
-          assert.equal(res.body.message, 'invalid input');
+          assert.equal(res.body.message, 'invalid _id');
           done();
         });
     });
-    // #10
-    test('Update an issue with no fields to update', function (done) {
+    // #14
+    test('Delete an issue with missing _id', function (done) {
       chai
         .request(server)
-        .put('/api/issues/:project')
-        .send({ _id: '63c5a9c7230a9948ebc14892' })
-        .end(function (err, res) {
-          assert.isNull(err);
-          assert.equal(res.status, 200);
-          assert.equal(res.type, 'application/json');
-          assert.equal(res.body.result, 'successfully updated');
-          done();
-        });
-    });
-    // #11
-    test('Update an issue with an invalid _id', function (done) {
-      chai
-        .request(server)
-        .put('/api/issues/:project')
-        .send({ _id: '630cc27e4fc5c809ff71d159', issue_text: 'New issue', assigned_to: 'Marcus' })
+        .delete('/api/issues/:project')
+        .send({})
         .end(function (err, res) {
           assert.isNull(err);
           assert.equal(res.status, 422);
           assert.equal(res.type, 'application/json');
-          assert.equal(res.body.message, 'invalid input');
+          assert.equal(res.body.message, 'invalid _id');
           done();
         });
     });

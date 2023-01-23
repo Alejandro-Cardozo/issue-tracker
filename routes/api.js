@@ -45,7 +45,6 @@ module.exports = function (app) {
     })
 
     .put(async function (req, res) {
-      let date = new Date();
       let project = req.body;
       try {
         const updateObj = {};
@@ -73,8 +72,9 @@ module.exports = function (app) {
         let projectId = req.body._id;
         const result = await Issue.findByIdAndDelete(projectId);
         console.log(result.issue_title + ' issue succesfully deleted');
-        res.send({ result: 'successfully deleted', _id: result._id });
+        res.status(200).send({ result: 'successfully deleted', _id: result._id });
       } catch (error) {
+        res.status(422).send({ message: 'invalid _id' });
         console.log(error);
       }
     });

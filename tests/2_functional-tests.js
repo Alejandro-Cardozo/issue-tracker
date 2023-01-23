@@ -61,7 +61,7 @@ suite('Functional Tests', function () {
         .end(function (err, res) {
           assert.equal(res.status, 422);
           assert.equal(res.type, 'application/json');
-          assert.equal(res.body.message, 'invalid input');
+          assert.equal(res.body.error, 'required field(s) missing');
 
           done();
         });
@@ -145,7 +145,7 @@ suite('Functional Tests', function () {
           assert.isNull(err);
           assert.equal(res.status, 422);
           assert.equal(res.type, 'application/json');
-          assert.equal(res.body.message, 'invalid input');
+          assert.equal(res.body.error, 'missing _id');
           done();
         });
     });
@@ -169,7 +169,7 @@ suite('Functional Tests', function () {
         .request(server)
         .put('/api/issues/:project')
         .send({
-          _id: '630cc27e4fc5c809ff71d159',
+          _id: '630fb02efb7c75018f7b3fcb',
           issue_text: 'New issue',
           assigned_to: 'Marcus',
         })
@@ -177,7 +177,7 @@ suite('Functional Tests', function () {
           assert.isNull(err);
           assert.equal(res.status, 422);
           assert.equal(res.type, 'application/json');
-          assert.equal(res.body.message, 'invalid input');
+          assert.equal(res.body.error, 'could not update');
           done();
         });
     });
@@ -202,12 +202,12 @@ suite('Functional Tests', function () {
       chai
         .request(server)
         .delete('/api/issues/:project')
-        .send({ _id: process.env.DELETE_ID_TEST })
+        .send({ _id: '630fb02efb7c75018f7b3fcb' })
         .end(function (err, res) {
           assert.isNull(err);
           assert.equal(res.status, 422);
           assert.equal(res.type, 'application/json');
-          assert.equal(res.body.message, 'invalid _id');
+          assert.equal(res.body.error, 'could not delete');
           done();
         });
     });
@@ -221,7 +221,7 @@ suite('Functional Tests', function () {
           assert.isNull(err);
           assert.equal(res.status, 422);
           assert.equal(res.type, 'application/json');
-          assert.equal(res.body.message, 'invalid _id');
+          assert.equal(res.body.error, 'missing _id');
           done();
         });
     });

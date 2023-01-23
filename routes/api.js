@@ -12,10 +12,8 @@ module.exports = function (app) {
         findConditions[key] = req.query[key];
       }
       try {
-        const issues = await Issue.find({
-          findConditions,
-        });
-        res.json(issues);
+        const issues = await Issue.find(findConditions);
+        res.status(200).json(issues);
       } catch (error) {
         console.log(error);
       }
@@ -39,13 +37,18 @@ module.exports = function (app) {
         console.log(project.issue_title + ' issue created');
         res.status(200).send(issue);
       } catch (error) {
-        res.status(422).send({ message: 'invalid input' });
+        res.status(422).send({ error: 'required field(s) missing' });
         console.log(error);
       }
     })
 
     .put(async function (req, res) {
+      let date = new Date();
       let project = req.body;
+      if (!project._id) {
+        res.status(422).send({ error: 'missing _id' });
+        return;
+      }
       try {
         const updateObj = {};
         for (let key in project) {
@@ -54,27 +57,32 @@ module.exports = function (app) {
           }
         }
         updateObj.open = project.open;
+        updateObj.updated_on = date;
         const issue = await Issue.findOneAndUpdate(
           { _id: project._id },
           updateObj,
           { new: true }
         );
-        console.log(issue.issue_title + ' issue updated');
         res.send({ result: 'successfully updated', _id: issue._id });
       } catch (error) {
-        res.status(422).send({ message: 'invalid input' });
+        res.status(422).send({ error: 'could not update', _id: project._id });
         console.log(error);
       }
     })
 
     .delete(async function (req, res) {
+      let projectId = req.body._id;
       try {
-        let projectId = req.body._id;
+        if (!projectId) {
+          res.status(422).send({ error: 'missing _id' });
+          return;
+        }
         const result = await Issue.findByIdAndDelete(projectId);
-        console.log(result.issue_title + ' issue succesfully deleted');
-        res.status(200).send({ result: 'successfully deleted', _id: result._id });
+        res
+          .status(200)
+          .send({ result: 'successfully deleted', _id: result._id });
       } catch (error) {
-        res.status(422).send({ message: 'invalid _id' });
+        res.status(422).send({ error: 'could not delete', _id: projectId });
         console.log(error);
       }
     });

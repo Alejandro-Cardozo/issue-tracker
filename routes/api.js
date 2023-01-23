@@ -63,6 +63,7 @@ module.exports = function (app) {
         console.log(issue.issue_title + ' issue updated');
         res.send({ result: 'successfully updated', _id: issue._id });
       } catch (error) {
+        res.status(422).send({ message: 'invalid input' });
         console.log(error);
       }
     })

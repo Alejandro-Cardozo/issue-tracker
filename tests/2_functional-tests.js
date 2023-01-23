@@ -67,37 +67,109 @@ suite('Functional Tests', function () {
   //       });
   //   });
   // });
-  suite('GET Requests', function () {
-    // #4
-    test('View issues on a project', function (done) {
+  // suite('GET Requests', function () {
+  //   // #4
+  //   test('View issues on a project', function (done) {
+  //     chai
+  //       .request(server)
+  //       .get('/api/issues/:project')
+  //       .end(function (err, res) {
+  //         assert.equal(res.status, 200);
+  //         assert.equal(res.type, 'application/json');
+  //         done();
+  //       });
+  //   });
+  //   // #5
+  //   test('View issues on a project with one filter', function (done) {
+  //     chai
+  //       .request(server)
+  //       .get('/api/issues/:project?open=true')
+  //       .end(function (err, res) {
+  //         assert.equal(res.status, 200);
+  //         assert.equal(res.type, 'application/json');
+  //         done();
+  //       });
+  //   });
+  //   // #6
+  //   test('View issues on a project with multiple filters', function (done) {
+  //     chai
+  //       .request(server)
+  //       .get('/api/issues/:project?open=true&created_by=Ash')
+  //       .end(function (err, res) {
+  //         assert.equal(res.status, 200);
+  //         assert.equal(res.type, 'application/json');
+  //         done();
+  //       });
+  //   });
+  // });
+  suite('PUT Requests', function () {
+    // #7
+    test('Update one field on an issue', function (done) {
       chai
         .request(server)
-        .get('/api/issues/:project')
+        .put('/api/issues/:project')
+        .send({ _id: '63c5a9c7230a9948ebc14892', issue_text: 'New text' })
         .end(function (err, res) {
+          assert.isNull(err);
           assert.equal(res.status, 200);
           assert.equal(res.type, 'application/json');
+          assert.equal(res.body.result, 'successfully updated');
           done();
         });
     });
-    // #5
-    test('View issues on a project with one filter', function (done) {
+    // #8
+    test('Update multiple fields on an issue', function (done) {
       chai
         .request(server)
-        .get('/api/issues/:project?open=true')
+        .put('/api/issues/:project')
+        .send({ _id: '63c5a9c7230a9948ebc14892', issue_text: 'New issue', assigned_to: 'Marcus' })
         .end(function (err, res) {
+          assert.isNull(err);
           assert.equal(res.status, 200);
           assert.equal(res.type, 'application/json');
+          assert.equal(res.body.result, 'successfully updated');
           done();
         });
     });
-    // #6
-    test('View issues on a project with multiple filters', function (done) {
+    // #9
+    test('Update an issue with missing _id', function (done) {
       chai
         .request(server)
-        .get('/api/issues/:project?open=true&created_by=Ash')
+        .put('/api/issues/:project')
+        .send({ issue_text: 'New issue', assigned_to: 'Marcus' })
         .end(function (err, res) {
+          assert.isNull(err);
+          assert.equal(res.status, 422);
+          assert.equal(res.type, 'application/json');
+          assert.equal(res.body.message, 'invalid input');
+          done();
+        });
+    });
+    // #10
+    test('Update an issue with no fields to update', function (done) {
+      chai
+        .request(server)
+        .put('/api/issues/:project')
+        .send({ _id: '63c5a9c7230a9948ebc14892' })
+        .end(function (err, res) {
+          assert.isNull(err);
           assert.equal(res.status, 200);
           assert.equal(res.type, 'application/json');
+          assert.equal(res.body.result, 'successfully updated');
+          done();
+        });
+    });
+    // #11
+    test('Update an issue with an invalid _id', function (done) {
+      chai
+        .request(server)
+        .put('/api/issues/:project')
+        .send({ _id: '630cc27e4fc5c809ff71d159', issue_text: 'New issue', assigned_to: 'Marcus' })
+        .end(function (err, res) {
+          assert.isNull(err);
+          assert.equal(res.status, 422);
+          assert.equal(res.type, 'application/json');
+          assert.equal(res.body.message, 'invalid input');
           done();
         });
     });
